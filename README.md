@@ -5,16 +5,23 @@ A real-time 3D hand tracking website built with HTML, CSS, and JS using MediaPip
 ## Features
 
 * **Anatomical Tracking:** Measures X, Y, and Z spatial coordinates for 21 separate joint/landmarks on each hand.
-* **Color-coded:** Separates the:
-  * wrist base (red)
-  * pinky (purple)
-  * thumb (orange)
-  * index (yellow)
-  * middle (green)
-  * ring (blue)
-* fingers individually, whilst visually using distinct colors to match the data display with the camera mesh.
-* **Performance Overlay:** Displays a live frames-per-second (FPS) counter to monitor video feed.
+Color-Coded Mesh Tracking: Maps distinct visual identifiers to the real-time camera overlay, matching coordinate data seamlessly with the hand mesh:
 
+Wrist Base: Highlighted in red
+
+Pinky Finger: Highlighted in purple
+
+Thumb: Highlighted in orange
+
+Index Finger: Highlighted in yellow
+
+Middle Finger: Highlighted in green
+
+Ring Finger: Highlighted in blue
+
+Granular Landmark Isolation: Separates and displays tracking telemetry for all 21 individual joint coordinates simultaneously, allowing for easy side-by-side data comparison.
+
+Performance Diagnostic Overlay: Features an integrated, live frames-per-second (FPS) counter to monitor video processing efficiency and stream stability.
 ## How to Use
 1. Open the live link: (https://christopherjun979-source.github.io/ParkinsonHandTrack/) in any standard web browser.
 3. Grant camera permissions when prompted by the application.
