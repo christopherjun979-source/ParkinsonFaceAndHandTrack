@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Parkinson's Hand Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #09090b;
+            color: #fafafa;
+            margin: 0;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        h2 {
+            margin: 0 0 15px 0;
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #a1a1aa;
+        }
+
+        #app-layout {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 15px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        #container {
+            position: relative;
+            width: 640px;
+            height: 480px;
+            flex-shrink: 0;
+            background: #000;
+        }
+
+        video,
+        canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: rotateY(180deg);
+        }
+
+        #fps-counter {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            background: rgba(18, 18, 20, 0.85);
+            color: #00ff00;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            pointer-events: none;
+        }
+
+        .hand-column {
+            flex: 1;
+            background: #121214;
+            padding: 15px;
+            height: 446px;
+            box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hand-header {
+            font-size: 16px;
+            color: #ffffff;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #27272a;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .status-msg {
+            color: #52525b;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            height: 100%;
+        }
+
+        .finger-group {
+            background: #18181b;
+            border-radius: 4px;
+            padding: 6px 8px;
+        }
+
+        .finger-group[data-group="Wrist Base"] {
+            border: 1px solid #ef4444;
+        }
+
+        .finger-group[data-group="Thumb"] {
+            border: 1px solid #f97316;
+        }
+
+        .finger-group[data-group="Index Finger"] {
+            border: 1px solid #eab308;
+        }
+
+        .finger-group[data-group="Middle Finger"] {
+            border: 1px solid #22c55e;
+        }
+
+        .finger-group[data-group="Ring Finger"] {
+            border: 1px solid #3b82f6;
+        }
+
+        .finger-group[data-group="Pinky Finger"] {
+            border: 1px solid #a855f7;
+        }
+
+        .finger-title {
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #27272a;
+        }
+
+        .finger-group[data-group="Wrist Base"] .finger-title {
+            color: #ef4444;
+        }
+
+        .finger-group[data-group="Thumb"] .finger-title {
+            color: #f97316;
+        }
+
+        .finger-group[data-group="Index Finger"] .finger-title {
+            color: #eab308;
+        }
+
+        .finger-group[data-group="Middle Finger"] .finger-title {
+            color: #22c55e;
+        }
+
+        .finger-group[data-group="Ring Finger"] .finger-title {
+            color: #3b82f6;
+        }
+
+        .finger-group[data-group="Pinky Finger"] .finger-title {
+            color: #a855f7;
+        }
+
+        .coord-line {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            line-height: 1.2;
+            color: #a1a1aa;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .coord-values {
+            color: #fafafa;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Parkinson's Hand Tracker</h2>
+
+    <div id="app-layout">
+        <div class="hand-column" id="left-column">
+            <div id="left-data" class="status-msg">NO DATA DETECTED</div>
+        </div>
+
+        <div id="container">
+            <div id="fps-counter">FPS: --</div>
+            <video id="webcam" width="640" height="480" autoplay playsinline></video>
+            <canvas id="output_canvas" width="640" height="480"></canvas>
+        </div>
+
+        <div class="hand-column" id="right-column">
+            <div id="right-data" class="status-msg">NO DATA DETECTED</div>
+        </div>
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('webcam');
+        const canvasElement = document.getElementById('output_canvas');
+        const canvasCtx = canvasElement.getContext('2d');
+
+        const leftData = document.getElementById('left-data');
+        const rightData = document.getElementById('right-data');
+        const fpsCounter = document.getElementById('fps-counter');
+
+        const landmarkGroups = [
+            { name: "Wrist Base", indices: [0], color: '#ef4444' },
+            { name: "Thumb", indices: [1, 2, 3, 4], color: '#f97316' },
+            { name: "Index Finger", indices: [5, 6, 7, 8], color: '#eab308' },
+            { name: "Middle Finger", indices: [9, 10, 11, 12], color: '#22c55e' },
+            { name: "Ring Finger", indices: [13, 14, 15, 16], color: '#3b82f6' },
+            { name: "Pinky Finger", indices: [17, 18, 19, 20], color: '#a855f7' }
+        ];
+
+        let activeTracks = {
+            panelA: null,
+            panelB: null
+        };
+
+        let lastFrameTime = performance.now();
+        let frameCount = 0;
+        let fps = 0;
+
+        function updateFPS() {
+            frameCount++;
+            const now = performance.now();
+            if (now >= lastFrameTime + 1000) {
+                fps = Math.round((frameCount * 1000) / (now - lastFrameTime));
+                fpsCounter.innerText = `FPS: ${fps}`;
+                frameCount = 0;
+                lastFrameTime = now;
+            }
+        }
+
+        function drawCustomConnections(ctx, landmarks, connections, color) {
+            for (const connection of connections) {
+                const first = landmarks[connection[0]];
+                const second = landmarks[connection[1]];
+                if (first && second) {
+                    ctx.beginPath();
+                    ctx.moveTo(first.x * canvasElement.width, first.y * canvasElement.height);
+                    ctx.lineTo(second.x * canvasElement.width, second.y * canvasElement.height);
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function onResults(results) {
+            updateFPS();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+            canvasCtx.save();
+            canvasCtx.translate(canvasElement.width, 0);
+            canvasCtx.scale(-1, 1);
+            canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+            let currentFrameHands = results.multiHandLandmarks || [];
+
+            let assignedPanelA = null;
+            let assignedPanelB = null;
+
+            if (currentFrameHands.length === 0) {
+                activeTracks.panelA = null;
+                activeTracks.panelB = null;
+            }
+
+            if (currentFrameHands.length > 0) {
+                let handPool = [...currentFrameHands];
+
+                if (activeTracks.panelA) {
+                    let bestIdx = -1;
+                    let minDist = 0.15;
+                    for (let i = 0; i < handPool.length; i++) {
+                        let dist = Math.hypot(handPool[i][0].x - activeTracks.panelA.x, handPool[i][0].y - activeTracks.panelA.y);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            bestIdx = i;
+                        }
+                    }
+                    if (bestIdx !== -1) {
+                        assignedPanelA = handPool.splice(bestIdx, 1)[0];
+                        activeTracks.panelA = { x: assignedPanelA[0].x, y: assignedPanelA[0].y };
+                    } else {
+                        activeTracks.panelA = null;
+                    }
+                }
+
+                if (activeTracks.panelB && handPool.length > 0) {
+                    let bestIdx = -1;
+                    let minDist = 0.15;
+                    for (let i = 0; i < handPool.length; i++) {
+                        let dist = Math.hypot(handPool[i][0].x - activeTracks.panelB.x, handPool[i][0].y - activeTracks.panelB.y);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            bestIdx = i;
+                        }
+                    }
+                    if (bestIdx !== -1) {
+                        assignedPanelB = handPool.splice(bestIdx, 1)[0];
+                        activeTracks.panelB = { x: assignedPanelB[0].x, y: assignedPanelB[0].y };
+                    } else {
+                        activeTracks.panelB = null;
+                    }
+                }
+
+                while (handPool.length > 0) {
+                    let newHand = handPool.shift();
+                    if (!assignedPanelA && !activeTracks.panelA && !assignedPanelB && (newHand[0].x > 0.5)) {
+                        assignedPanelA = newHand;
+                        activeTracks.panelA = { x: newHand[0].x, y: newHand[0].y };
+                    } else if (!assignedPanelB && !activeTracks.panelB) {
+                        assignedPanelB = newHand;
+                        activeTracks.panelB = { x: newHand[0].x, y: newHand[0].y };
+                    } else if (!assignedPanelA && !activeTracks.panelA) {
+                        assignedPanelA = newHand;
+                        activeTracks.panelA = { x: newHand[0].x, y: newHand[0].y };
+                    }
+                }
+            }
+
+            function generateHTML(landmarks, title) {
+                let htmlContent = `<div class="hand-header">${title}</div><div class="data-grid">`;
+                landmarkGroups.forEach(group => {
+                    htmlContent += `<div class="finger-group" data-group="${group.name}">`;
+                    htmlContent += `<div class="finger-title">${group.name}</div>`;
+                    group.indices.forEach(i => {
+                        const pt = landmarks[i];
+                        htmlContent += `
+              <div class="coord-line">
+                <span>P${i}:</span>
+                <span class="coord-values">X:${pt.x.toFixed(2)} Y:${pt.y.toFixed(2)} Z:${pt.z.toFixed(2)}</span>
+              </div>`;
+                    });
+                    htmlContent += `</div>`;
+                });
+                htmlContent += `</div>`;
+                return htmlContent;
+            }
+
+            if (assignedPanelA) {
+                drawCustomConnections(canvasCtx, assignedPanelA, [[0, 1], [1, 2], [2, 3], [3, 4]], '#f97316');
+                drawCustomConnections(canvasCtx, assignedPanelA, [[0, 5], [5, 6], [6, 7], [7, 8]], '#eab308');
+                drawCustomConnections(canvasCtx, assignedPanelA, [[9, 10], [10, 11], [11, 12], [0, 9]], '#22c55e');
+                drawCustomConnections(canvasCtx, assignedPanelA, [[13, 14], [14, 15], [15, 16], [0, 13]], '#3b82f6');
+                drawCustomConnections(canvasCtx, assignedPanelA, [[17, 18], [18, 19], [19, 20], [0, 17]], '#a855f7');
+                landmarkGroups.forEach(group => {
+                    group.indices.forEach(i => {
+                        canvasCtx.beginPath();
+                        canvasCtx.arc(assignedPanelA[i].x * canvasElement.width, assignedPanelA[i].y * canvasElement.height, 4, 0, 2 * Math.PI);
+                        canvasCtx.fillStyle = group.color;
+                        canvasCtx.fill();
+                    });
+                });
+                leftData.className = "";
+                leftData.innerHTML = generateHTML(assignedPanelA, "Stream Panel A");
+            } else {
+                leftData.className = "status-msg";
+                leftData.innerHTML = "NO DATA DETECTED";
+            }
+
+            if (assignedPanelB) {
+                drawCustomConnections(canvasCtx, assignedPanelB, [[0, 1], [1, 2], [2, 3], [3, 4]], '#f97316');
+                drawCustomConnections(canvasCtx, assignedPanelB, [[0, 5], [5, 6], [6, 7], [7, 8]], '#eab308');
+                drawCustomConnections(canvasCtx, assignedPanelB, [[9, 10], [10, 11], [11, 12], [0, 9]], '#22c55e');
+                drawCustomConnections(canvasCtx, assignedPanelB, [[13, 14], [14, 15], [15, 16], [0, 13]], '#3b82f6');
+                drawCustomConnections(canvasCtx, assignedPanelB, [[17, 18], [18, 19], [19, 20], [0, 17]], '#a855f7');
+                landmarkGroups.forEach(group => {
+                    group.indices.forEach(i => {
+                        canvasCtx.beginPath();
+                        canvasCtx.arc(assignedPanelB[i].x * canvasElement.width, assignedPanelB[i].y * canvasElement.height, 4, 0, 2 * Math.PI);
+                        canvasCtx.fillStyle = group.color;
+                        canvasCtx.fill();
+                    });
+                });
+                rightData.className = "";
+                rightData.innerHTML = generateHTML(assignedPanelB, "Stream Panel B");
+            } else {
+                rightData.className = "status-msg";
+                rightData.innerHTML = "NO DATA DETECTED";
+            }
+
+            canvasCtx.restore();
+        }
+
+        const hands = new Hands({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+        });
+
+        hands.setOptions({
+            maxNumHands: 2,
+            modelComplexity: 1,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+
+        hands.onResults(onResults);
+
+        const camera = new Camera(videoElement, {
+            onFrame: async () => {
+                await hands.send({ image: videoElement });
+            },
+            width: 640,
+            height: 480
+        });
+        camera.start();
+    </script>
+</body>
+
+</html>
