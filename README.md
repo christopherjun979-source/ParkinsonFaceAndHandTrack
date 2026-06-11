@@ -1,4 +1,4 @@
-# Parkinson's Hand Tracker
+#Hand Tracker (Purpose is for Parkinson's investigations)
 
 A real-time 3D hand tracking website built with HTML, CSS, and JS using MediaPipe to study Parkinson's disease movements. The system tracks 21 points per hand with color-coded fingers. It uses persistent data panels that don't switch up when hands cross, while featuring a live FPS counter with no extra hardware needed.
 
