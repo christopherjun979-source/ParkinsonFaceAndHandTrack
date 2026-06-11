@@ -10,7 +10,7 @@ A real-time 3D hand tracking website built with HTML, CSS, and JS using MediaPip
 * **Performance Overlay:** Displays a live frames-per-second (FPS) counter to monitor video feed smoothness.
 
 ## How to Use
-
 1. Open the live link in any standard web browser.
-2. Grant camera permissions when prompted by the application.
-3. Place one or both hands into the frame to view the live tracking data.
+https://christopherjun979-source.github.io/ParkinsonHandTrack/
+3. Grant camera permissions when prompted by the application.
+4. Place one or both hands into the frame to view the live tracking data.
