@@ -13,44 +13,63 @@
             background: #09090b;
             color: #fafafa;
             margin: 0;
-            padding: 15px;
+            padding: 10px;
             overflow-x: hidden;
+        }
+
+        header {
+            max-width: 1280px;
+            margin: 0 auto 10px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
         }
 
         h2 {
             font-family: Arial, sans-serif;
-            margin: 0 0 15px 0;
-            font-size: 20px;
+            margin: 0;
+            font-size: 18px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: #a1a1aa;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1280px;
-            margin-left: auto;
-            margin-right: auto;
+        }
+
+        /* Minimalist Gray Gear Configuration Button */
+        #open-panel-btn {
+            background: transparent;
+            border: none;
+            color: #71717a;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        #open-panel-btn:hover {
+            color: #a1a1aa;
         }
 
         /* Floating, Draggable Control Panel Window */
         #control-panel {
             position: absolute;
             z-index: 999;
-            top: 80px;
-            left: 30px;
+            top: 45px;
+            right: 0;
             background: #121214;
             border: 1px solid #27272a;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-            width: 380px;
+            width: 320px;
             box-sizing: border-box;
-            display: flex;
+            display: none;
             flex-direction: column;
         }
 
         #control-panel-header {
             background: #1c1c1f;
-            padding: 10px;
+            padding: 8px 12px;
             cursor: move;
             font-size: 11px;
             font-weight: 700;
@@ -68,7 +87,6 @@
             color: #a1a1aa;
             font-weight: bold;
             font-size: 14px;
-            padding: 0 5px;
         }
         
         #close-panel-btn:hover {
@@ -76,75 +94,59 @@
         }
 
         #control-panel-body {
-            padding: 15px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         .control-row {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             align-items: flex-start;
         }
 
         .control-label-group {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
             color: #a1a1aa;
             letter-spacing: 1px;
             border-bottom: 1px solid #27272a;
             width: 100%;
-            padding-bottom: 3px;
+            padding-bottom: 2px;
         }
 
         .toggle-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
         }
 
         .toggle-item input[type="checkbox"] {
             accent-color: #fafafa;
             cursor: pointer;
-            width: 14px;
-            height: 14px;
-        }
-
-        /* Menu Open Button */
-        #open-panel-btn {
-            background: #121214;
-            border: 1px solid #27272a;
-            color: #fafafa;
-            padding: 6px 12px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-        }
-
-        #open-panel-btn:hover {
-            background: #1c1c1f;
+            width: 13px;
+            height: 13px;
         }
 
         #app-layout {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             max-width: 1280px;
             margin: 0 auto;
         }
 
+        /* Smaller Video Container Size to fit screen space completely */
         #container {
             position: relative;
-            width: 1280px;
-            height: 720px;
+            width: 960px;
+            height: 540px;
             background: #000;
             overflow: hidden;
         }
@@ -154,37 +156,38 @@
             position: absolute;
             left: 0;
             top: 0;
-            width: 1280px;
-            height: 720px;
+            width: 960px;
+            height: 540px;
             transform: scaleX(-1);
         }
 
         #fps-counter {
             font-family: Arial, sans-serif;
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 10px;
+            right: 10px;
             z-index: 10;
             background: rgba(18, 18, 20, 0.85);
             color: #00ff00;
-            padding: 4px 8px;
-            font-size: 11px;
+            padding: 3px 6px;
+            font-size: 10px;
             font-weight: bold;
             letter-spacing: 0.5px;
             pointer-events: none;
         }
 
+        /* Compact Grid columns layout wrapper to view all data at once */
         .original-data-grid-layout {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 10px;
             width: 1280px;
             box-sizing: border-box;
         }
 
         .data-panel-block {
             background: #121214;
-            padding: 15px;
+            padding: 10px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -192,53 +195,53 @@
 
         .hand-header {
             font-family: Arial, sans-serif;
-            font-size: 14px;
+            font-size: 12px;
             color: #ffffff;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            padding-bottom: 5px;
-            margin-bottom: 12px;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
             border-bottom: 1px solid #27272a;
         }
 
         .status-msg {
             font-family: Arial, sans-serif;
             color: #52525b;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin: 20px auto;
+            margin: 15px auto;
             text-align: center;
         }
 
         .finger-vertical-stack {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 6px;
         }
 
         .finger-group {
             background: #18181b;
-            padding: 8px;
+            padding: 6px;
         }
 
-        .finger-group[data-group="Wrist Base"] { border-left: 3px solid #ef4444; }
-        .finger-group[data-group="Thumb"] { border-left: 3px solid #f97316; }
-        .finger-group[data-group="Index Finger"] { border-left: 3px solid #eab308; }
-        .finger-group[data-group="Middle Finger"] { border-left: 3px solid #22c55e; }
-        .finger-group[data-group="Ring Finger"] { border-left: 3px solid #3b82f6; }
-        .finger-group[data-group="Pinky Finger"] { border-left: 3px solid #a855f7; }
+        .finger-group[data-group="Wrist Base"] { border-left: 2px solid #ef4444; }
+        .finger-group[data-group="Thumb"] { border-left: 2px solid #f97316; }
+        .finger-group[data-group="Index Finger"] { border-left: 2px solid #eab308; }
+        .finger-group[data-group="Middle Finger"] { border-left: 2px solid #22c55e; }
+        .finger-group[data-group="Ring Finger"] { border-left: 2px solid #3b82f6; }
+        .finger-group[data-group="Pinky Finger"] { border-left: 2px solid #a855f7; }
         
-        .finger-group[data-group="Face-LeftEye"] { border-left: 3px solid #22d3ee; }
-        .finger-group[data-group="Face-RightEye"] { border-left: 3px solid #c084fc; }
-        .finger-group[data-group="Face-Lips"] { border-left: 3px solid #ef4444; }
+        .finger-group[data-group="Face-LeftEye"] { border-left: 2px solid #22d3ee; }
+        .finger-group[data-group="Face-RightEye"] { border-left: 2px solid #c084fc; }
+        .finger-group[data-group="Face-Lips"] { border-left: 2px solid #ef4444; }
 
         .finger-title {
             font-family: Arial, sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -256,8 +259,8 @@
 
         .coord-line {
             font-family: Arial, sans-serif;
-            font-size: 11px;
-            line-height: 1.4;
+            font-size: 10px;
+            line-height: 1.3;
             color: #a1a1aa;
             display: flex;
             justify-content: space-between;
@@ -272,51 +275,51 @@
 
 <body>
 
-    <h2>
-        <span>Parkinson Face & Hand Tracker</span>
-        <button id="open-panel-btn" onclick="showPanel()">🔧 Open Modules Menu</button>
-    </h2>
+    <header>
+        <h2>Parkinson Face & Hand Tracker</h2>
+        <button id="open-panel-btn" onclick="togglePanel()">&#9881;</button>
+        
+        <div id="control-panel">
+            <div id="control-panel-header">
+                <span>Modules Selection</span>
+                <span id="close-panel-btn" onclick="hidePanel()">✕</span>
+            </div>
+            <div id="control-panel-body">
+                <div class="control-row">
+                    <span class="control-label-group">Face Modules:</span>
+                    <label class="toggle-item" style="color: #22d3ee;"><input type="checkbox" id="show-lefteye" checked> Left Eye</label>
+                    <label class="toggle-item" style="color: #c084fc;"><input type="checkbox" id="show-righteye" checked> Right Eye</label>
+                    <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="show-lips" checked> Lips</label>
+                </div>
+                
+                <div class="control-row">
+                    <span class="control-label-group">Stream Panel A Hand:</span>
+                    <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="pa-wrist" checked> Wrist</label>
+                    <label class="toggle-item" style="color: #f97316;"><input type="checkbox" id="pa-thumb" checked> Thumb</label>
+                    <label class="toggle-item" style="color: #eab308;"><input type="checkbox" id="pa-index" checked> Index</label>
+                    <label class="toggle-item" style="color: #22c55e;"><input type="checkbox" id="pa-middle" checked> Middle</label>
+                    <label class="toggle-item" style="color: #3b82f6;"><input type="checkbox" id="pa-ring" checked> Ring</label>
+                    <label class="toggle-item" style="color: #a855f7;"><input type="checkbox" id="pa-pinky" checked> Pinky</label>
+                </div>
 
-    <div id="control-panel">
-        <div id="control-panel-header">
-            <span>⚙️ Modules Selection</span>
-            <span id="close-panel-btn" onclick="hidePanel()">✕</span>
-        </div>
-        <div id="control-panel-body">
-            <div class="control-row">
-                <span class="control-label-group">Face Modules:</span>
-                <label class="toggle-item" style="color: #22d3ee;"><input type="checkbox" id="show-lefteye" checked> Left Eye</label>
-                <label class="toggle-item" style="color: #c084fc;"><input type="checkbox" id="show-righteye" checked> Right Eye</label>
-                <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="show-lips" checked> Lips</label>
-            </div>
-            
-            <div class="control-row">
-                <span class="control-label-group">Stream Panel A Hand:</span>
-                <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="pa-wrist" checked> Wrist</label>
-                <label class="toggle-item" style="color: #f97316;"><input type="checkbox" id="pa-thumb" checked> Thumb</label>
-                <label class="toggle-item" style="color: #eab308;"><input type="checkbox" id="pa-index" checked> Index</label>
-                <label class="toggle-item" style="color: #22c55e;"><input type="checkbox" id="pa-middle" checked> Middle</label>
-                <label class="toggle-item" style="color: #3b82f6;"><input type="checkbox" id="pa-ring" checked> Ring</label>
-                <label class="toggle-item" style="color: #a855f7;"><input type="checkbox" id="pa-pinky" checked> Pinky</label>
-            </div>
-
-            <div class="control-row">
-                <span class="control-label-group">Stream Panel B Hand:</span>
-                <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="pb-wrist" checked> Wrist</label>
-                <label class="toggle-item" style="color: #f97316;"><input type="checkbox" id="pb-thumb" checked> Thumb</label>
-                <label class="toggle-item" style="color: #eab308;"><input type="checkbox" id="pb-index" checked> Index</label>
-                <label class="toggle-item" style="color: #22c55e;"><input type="checkbox" id="pb-middle" checked> Middle</label>
-                <label class="toggle-item" style="color: #3b82f6;"><input type="checkbox" id="pb-ring" checked> Ring</label>
-                <label class="toggle-item" style="color: #a855f7;"><input type="checkbox" id="pb-pinky" checked> Pinky</label>
+                <div class="control-row">
+                    <span class="control-label-group">Stream Panel B Hand:</span>
+                    <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="pb-wrist" checked> Wrist</label>
+                    <label class="toggle-item" style="color: #f97316;"><input type="checkbox" id="pb-thumb" checked> Thumb</label>
+                    <label class="toggle-item" style="color: #eab308;"><input type="checkbox" id="pb-index" checked> Index</label>
+                    <label class="toggle-item" style="color: #22c55e;"><input type="checkbox" id="pb-middle" checked> Middle</label>
+                    <label class="toggle-item" style="color: #3b82f6;"><input type="checkbox" id="pb-ring" checked> Ring</label>
+                    <label class="toggle-item" style="color: #a855f7;"><input type="checkbox" id="pb-pinky" checked> Pinky</label>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
 
     <div id="app-layout">
         <div id="container">
             <div id="fps-counter">FPS: --</div>
-            <video id="webcam" width="1280" height="720" autoplay playsinline></video>
-            <canvas id="output_canvas" width="1280" height="720"></canvas>
+            <video id="webcam" width="960" height="540" autoplay playsinline></video>
+            <canvas id="output_canvas" width="960" height="540"></canvas>
         </div>
 
         <div class="original-data-grid-layout">
@@ -408,7 +411,13 @@
         let fps = 0;
 
         function hidePanel() { controlPanel.style.display = 'none'; }
-        function showPanel() { controlPanel.style.display = 'flex'; }
+        function togglePanel() { 
+            if(controlPanel.style.display === 'flex') {
+                controlPanel.style.display = 'none';
+            } else {
+                controlPanel.style.display = 'flex';
+            }
+        }
 
         dragElement(controlPanel);
 
@@ -468,7 +477,7 @@
                     ctx.moveTo(first.x * canvasElement.width, first.y * canvasElement.height);
                     ctx.lineTo(second.x * canvasElement.width, second.y * canvasElement.height);
                     ctx.strokeStyle = color;
-                    ctx.lineWidth = 3;
+                    ctx.lineWidth = 2;
                     ctx.stroke();
                 }
             }
@@ -481,7 +490,7 @@
                     group.indices.forEach(i => {
                         if (landmarks[i]) {
                             ctx.beginPath();
-                            ctx.arc(landmarks[i].x * canvasElement.width, landmarks[i].y * canvasElement.height, 4, 0, 2 * Math.PI);
+                            ctx.arc(landmarks[i].x * canvasElement.width, landmarks[i].y * canvasElement.height, 3, 0, 2 * Math.PI);
                             ctx.fillStyle = group.color;
                             ctx.fill();
                         }
@@ -496,7 +505,7 @@
                 const pt = landmarks[item.id];
                 if (pt) {
                     ctx.beginPath();
-                    ctx.arc(pt.x * canvasElement.width, pt.y * canvasElement.height, 4, 0, 2 * Math.PI);
+                    ctx.arc(pt.x * canvasElement.width, pt.y * canvasElement.height, 3, 0, 2 * Math.PI);
                     ctx.fillStyle = color;
                     ctx.fill();
                 }
@@ -588,7 +597,7 @@
             } else {
                 let handPool = [...currentFrameHands];
                 if (activeTracks.panelA) {
-                    let bestIdx = -1, minDist = 0.15;
+                    let bestIdx = -1, minDist = 0.20;
                     for (let i = 0; i < handPool.length; i++) {
                         let dist = Math.hypot(handPool[i][0].x - activeTracks.panelA.x, handPool[i][0].y - activeTracks.panelA.y);
                         if (dist < minDist) { minDist = dist; bestIdx = i; }
@@ -599,7 +608,7 @@
                     } else { activeTracks.panelA = null; }
                 }
                 if (activeTracks.panelB && handPool.length > 0) {
-                    let bestIdx = -1, minDist = 0.15;
+                    let bestIdx = -1, minDist = 0.20;
                     for (let i = 0; i < handPool.length; i++) {
                         let dist = Math.hypot(handPool[i][0].x - activeTracks.panelB.x, handPool[i][0].y - activeTracks.panelB.y);
                         if (dist < minDist) { minDist = dist; bestIdx = i; }
@@ -638,7 +647,6 @@
 
             if (assignedPanelB) {
                 drawCustomConnections(canvasCtx, assignedPanelB, [[0, 1], [1, 2], [2, 3], [3, 4]], '#f97316', 'thumb', 'panelB');
-                // FIXED: corrected third-party variable mismatch syntax error 'pb' -> 'panelB'
                 drawCustomConnections(canvasCtx, assignedPanelB, [[0, 5], [5, 6], [6, 7], [7, 8]], '#eab308', 'index', 'panelB');
                 drawCustomConnections(canvasCtx, assignedPanelB, [[9, 10], [10, 11], [11, 12], [0, 9]], '#22c55e', 'middle', 'panelB');
                 drawCustomConnections(canvasCtx, assignedPanelB, [[13, 14], [14, 15], [15, 16], [0, 13]], '#3b82f6', 'ring', 'panelB');
@@ -656,17 +664,16 @@
             locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`
         });
 
-        // FIXED: Dropped complexity down to 0 to trigger the high-performance engine variant
         holistic.setOptions({
             modelComplexity: 0,
             smoothLandmarks: true,
-            minDetectionConfidence: 0.5,
-            minTrackingConfidence: 0.5
+            minDetectionConfidence: 0.4,
+            minTrackingConfidence: 0.4
         });
 
         holistic.onResults(onResults);
 
-        // FIXED: Camera stream feeds lightweight tracking pixels down to machine-learning model
+        // Optimized video feed size processing for seamless dual hand operations
         const camera = new Camera(videoElement, {
             onFrame: async () => {
                 await holistic.send({ image: videoElement });
