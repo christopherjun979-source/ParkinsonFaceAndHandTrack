@@ -45,13 +45,7 @@
             flex-wrap: wrap;
             gap: 12px;
             align-items: center;
-            border-bottom: 1px solid #27272a;
-            padding-bottom: 8px;
-        }
-
-        .control-row:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
+            padding-bottom: 4px;
         }
 
         .control-label-group {
@@ -147,7 +141,6 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border-bottom: 2px solid #27272a;
             padding-bottom: 5px;
             margin-bottom: 10px;
         }
@@ -357,6 +350,9 @@
         let lastFrameTime = performance.now();
         let frameCount = 0;
         let fps = 0;
+
+        // Note: The border-bottom remains inside individual tracking data panels 
+        // to cleanly keep labels attached to their specific text readouts.
 
         function updateFPS() {
             frameCount++;
