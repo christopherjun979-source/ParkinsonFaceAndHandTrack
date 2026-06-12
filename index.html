@@ -19,33 +19,74 @@
 
         h2 {
             font-family: Arial, sans-serif;
-            margin: 0 0 10px 0;
+            margin: 0 0 15px 0;
             font-size: 20px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: #a1a1aa;
-        }
-
-        #control-panel {
-            background: #121214;
-            padding: 12px;
-            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             max-width: 1280px;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        /* Floating, Draggable Control Panel Window */
+        #control-panel {
+            position: absolute;
+            z-index: 999;
+            top: 80px;
+            left: 30px;
+            background: #121214;
+            border: 1px solid #27272a;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+            width: 380px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+        }
+
+        #control-panel-header {
+            background: #1c1c1f;
+            padding: 10px;
+            cursor: move;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #27272a;
+        }
+
+        #close-panel-btn {
+            cursor: pointer;
+            color: #a1a1aa;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 0 5px;
+        }
+        
+        #close-panel-btn:hover {
+            color: #ef4444;
+        }
+
+        #control-panel-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .control-row {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            padding-bottom: 4px;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
         }
 
         .control-label-group {
@@ -54,13 +95,15 @@
             text-transform: uppercase;
             color: #a1a1aa;
             letter-spacing: 1px;
-            min-width: 160px;
+            border-bottom: 1px solid #27272a;
+            width: 100%;
+            padding-bottom: 3px;
         }
 
         .toggle-item {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-size: 12px;
             cursor: pointer;
         }
@@ -70,9 +113,26 @@
             cursor: pointer;
             width: 14px;
             height: 14px;
-            border-radius: 0px;
         }
 
+        /* Menu Open Button */
+        #open-panel-btn {
+            background: #121214;
+            border: 1px solid #27272a;
+            color: #fafafa;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        #open-panel-btn:hover {
+            background: #1c1c1f;
+        }
+
+        /* Grid Structure Layout pushed up below video */
         #app-layout {
             display: flex;
             flex-direction: column;
@@ -111,106 +171,77 @@
             padding: 4px 8px;
             font-size: 11px;
             font-weight: bold;
-            border-radius: 0px;
             letter-spacing: 0.5px;
             pointer-events: none;
         }
 
-        /* Collapsible Section Containers */
-        .collapsible-panel {
-            background: #121214;
+        /* Original structural graphics layout wrapper */
+        .original-data-grid-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
             width: 1280px;
+            box-sizing: border-box;
+        }
+
+        .data-panel-block {
+            background: #121214;
+            padding: 15px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            padding: 12px;
-        }
-
-        /* Header Bar containing title and arrow toggle */
-        .panel-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
         }
 
         .hand-header {
             font-family: Arial, sans-serif;
-            font-size: 15px;
+            font-size: 14px;
             color: #ffffff;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        .arrow-icon {
-            font-size: 16px;
-            color: #a1a1aa;
-            transition: transform 0.2s ease;
-        }
-
-        /* When active, rotates the caret down */
-        .collapsible-panel.expanded .arrow-icon {
-            transform: rotate(90deg);
-        }
-
-        /* Expansible content tray holding original high-fidelity graphics formats */
-        .panel-content-tray {
-            display: none;
-            margin-top: 12px;
-        }
-
-        .collapsible-panel.expanded .panel-content-tray {
-            display: block;
-        }
-
-        /* Restoring your preferred original vertical grids inside the drop-downs */
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-        }
-
-        .face-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #27272a;
         }
 
         .status-msg {
             font-family: Arial, sans-serif;
             color: #52525b;
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin: 15px auto;
+            margin: 20px auto;
             text-align: center;
-            width: 100%;
+        }
+
+        /* Interior block styling */
+        .finger-vertical-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .finger-group {
             background: #18181b;
-            border-radius: 0px;
-            padding: 6px 8px;
+            padding: 8px;
         }
 
-        .finger-group[data-group="Wrist Base"] { border: 1px solid #ef4444; }
-        .finger-group[data-group="Thumb"] { border: 1px solid #f97316; }
-        .finger-group[data-group="Index Finger"] { border: 1px solid #eab308; }
-        .finger-group[data-group="Middle Finger"] { border: 1px solid #22c55e; }
-        .finger-group[data-group="Ring Finger"] { border: 1px solid #3b82f6; }
-        .finger-group[data-group="Pinky Finger"] { border: 1px solid #a855f7; }
+        .finger-group[data-group="Wrist Base"] { border-left: 3px solid #ef4444; }
+        .finger-group[data-group="Thumb"] { border-left: 3px solid #f97316; }
+        .finger-group[data-group="Index Finger"] { border-left: 3px solid #eab308; }
+        .finger-group[data-group="Middle Finger"] { border-left: 3px solid #22c55e; }
+        .finger-group[data-group="Ring Finger"] { border-left: 3px solid #3b82f6; }
+        .finger-group[data-group="Pinky Finger"] { border-left: 3px solid #a855f7; }
         
-        .finger-group[data-group="Face-LeftEye"] { border: 1px solid #22d3ee; }
-        .finger-group[data-group="Face-RightEye"] { border: 1px solid #c084fc; }
-        .finger-group[data-group="Face-Lips"] { border: 1px solid #ef4444; }
+        .finger-group[data-group="Face-LeftEye"] { border-left: 3px solid #22d3ee; }
+        .finger-group[data-group="Face-RightEye"] { border-left: 3px solid #c084fc; }
+        .finger-group[data-group="Face-Lips"] { border-left: 3px solid #ef4444; }
 
         .finger-title {
             font-family: Arial, sans-serif;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -228,8 +259,8 @@
 
         .coord-line {
             font-family: Arial, sans-serif;
-            font-size: 10px;
-            line-height: 1.3;
+            font-size: 11px;
+            line-height: 1.4;
             color: #a1a1aa;
             display: flex;
             justify-content: space-between;
@@ -244,34 +275,43 @@
 
 <body>
 
-    <h2>Parkinson Face & Hand Tracker</h2>
+    <h2>
+        <span>Parkinson Face & Hand Tracker</span>
+        <button id="open-panel-btn" onclick="showPanel()">🔧 Open Modules Menu</button>
+    </h2>
 
     <div id="control-panel">
-        <div class="control-row">
-            <span class="control-label-group">Face Modules:</span>
-            <label class="toggle-item" style="color: #22d3ee;"><input type="checkbox" id="show-lefteye" checked> Left Eye</label>
-            <label class="toggle-item" style="color: #c084fc;"><input type="checkbox" id="show-righteye" checked> Right Eye</label>
-            <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="show-lips" checked> Lips</label>
+        <div id="control-panel-header">
+            <span>⚙️ Modules Selection</span>
+            <span id="close-panel-btn" onclick="hidePanel()">✕</span>
         </div>
-        
-        <div class="control-row">
-            <span class="control-label-group">Stream Panel A Hand:</span>
-            <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="pa-wrist" checked> Wrist</label>
-            <label class="toggle-item" style="color: #f97316;"><input type="checkbox" id="pa-thumb" checked> Thumb</label>
-            <label class="toggle-item" style="color: #eab308;"><input type="checkbox" id="pa-index" checked> Index</label>
-            <label class="toggle-item" style="color: #22c55e;"><input type="checkbox" id="pa-middle" checked> Middle</label>
-            <label class="toggle-item" style="color: #3b82f6;"><input type="checkbox" id="pa-ring" checked> Ring</label>
-            <label class="toggle-item" style="color: #a855f7;"><input type="checkbox" id="pa-pinky" checked> Pinky</label>
-        </div>
+        <div id="control-panel-body">
+            <div class="control-row">
+                <span class="control-label-group">Face Modules:</span>
+                <label class="toggle-item" style="color: #22d3ee;"><input type="checkbox" id="show-lefteye" checked> Left Eye</label>
+                <label class="toggle-item" style="color: #c084fc;"><input type="checkbox" id="show-righteye" checked> Right Eye</label>
+                <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="show-lips" checked> Lips</label>
+            </div>
+            
+            <div class="control-row">
+                <span class="control-label-group">Stream Panel A Hand:</span>
+                <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="pa-wrist" checked> Wrist</label>
+                <label class="toggle-item" style="color: #f97316;"><input type="checkbox" id="pa-thumb" checked> Thumb</label>
+                <label class="toggle-item" style="color: #eab308;"><input type="checkbox" id="pa-index" checked> Index</label>
+                <label class="toggle-item" style="color: #22c55e;"><input type="checkbox" id="pa-middle" checked> Middle</label>
+                <label class="toggle-item" style="color: #3b82f6;"><input type="checkbox" id="pa-ring" checked> Ring</label>
+                <label class="toggle-item" style="color: #a855f7;"><input type="checkbox" id="pa-pinky" checked> Pinky</label>
+            </div>
 
-        <div class="control-row">
-            <span class="control-label-group">Stream Panel B Hand:</span>
-            <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="pb-wrist" checked> Wrist</label>
-            <label class="toggle-item" style="color: #f97316;"><input type="checkbox" id="pb-thumb" checked> Thumb</label>
-            <label class="toggle-item" style="color: #eab308;"><input type="checkbox" id="pb-index" checked> Index</label>
-            <label class="toggle-item" style="color: #22c55e;"><input type="checkbox" id="pb-middle" checked> Middle</label>
-            <label class="toggle-item" style="color: #3b82f6;"><input type="checkbox" id="pb-ring" checked> Ring</label>
-            <label class="toggle-item" style="color: #a855f7;"><input type="checkbox" id="pb-pinky" checked> Pinky</label>
+            <div class="control-row">
+                <span class="control-label-group">Stream Panel B Hand:</span>
+                <label class="toggle-item" style="color: #ef4444;"><input type="checkbox" id="pb-wrist" checked> Wrist</label>
+                <label class="toggle-item" style="color: #f97316;"><input type="checkbox" id="pb-thumb" checked> Thumb</label>
+                <label class="toggle-item" style="color: #eab308;"><input type="checkbox" id="pb-index" checked> Index</label>
+                <label class="toggle-item" style="color: #22c55e;"><input type="checkbox" id="pb-middle" checked> Middle</label>
+                <label class="toggle-item" style="color: #3b82f6;"><input type="checkbox" id="pb-ring" checked> Ring</label>
+                <label class="toggle-item" style="color: #a855f7;"><input type="checkbox" id="pb-pinky" checked> Pinky</label>
+            </div>
         </div>
     </div>
 
@@ -282,40 +322,29 @@
             <canvas id="output_canvas" width="1280" height="720"></canvas>
         </div>
 
-        <div class="collapsible-panel expanded" id="panel-a-container">
-            <div class="panel-header-row" onclick="toggleCollapse(this)">
+        <div class="original-data-grid-layout">
+            
+            <div class="data-panel-block">
                 <div class="hand-header">Stream Panel A</div>
-                <div class="arrow-icon">▶</div>
-            </div>
-            <div class="panel-content-tray">
-                <div id="left-data" class="data-grid">
+                <div id="left-data" class="finger-vertical-stack">
                     <div class="status-msg">NO HAND DETECTED</div>
                 </div>
             </div>
-        </div>
 
-        <div class="collapsible-panel expanded" id="panel-b-container">
-            <div class="panel-header-row" onclick="toggleCollapse(this)">
+            <div class="data-panel-block">
                 <div class="hand-header">Stream Panel B</div>
-                <div class="arrow-icon">▶</div>
-            </div>
-            <div class="panel-content-tray">
-                <div id="right-data" class="data-grid">
+                <div id="right-data" class="finger-vertical-stack">
                     <div class="status-msg">NO HAND DETECTED</div>
                 </div>
             </div>
-        </div>
 
-        <div class="collapsible-panel expanded" id="face-tracking-panel">
-            <div class="panel-header-row" onclick="toggleCollapse(this)">
+            <div class="data-panel-block">
                 <div class="hand-header">Facial Coordinates</div>
-                <div class="arrow-icon">▶</div>
-            </div>
-            <div class="panel-content-tray">
-                <div id="face-data" class="face-grid">
-                    <div class="status-msg" style="grid-column: span 3;">NO FACE DETECTED</div>
+                <div id="face-data" class="finger-vertical-stack">
+                    <div class="status-msg">NO FACE DETECTED</div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -328,6 +357,7 @@
         const rightData = document.getElementById('right-data');
         const faceData = document.getElementById('face-data');
         const fpsCounter = document.getElementById('fps-counter');
+        const controlPanel = document.getElementById('control-panel');
 
         const checkboxes = {
             leftEye: document.getElementById('show-lefteye'),
@@ -382,10 +412,46 @@
         let frameCount = 0;
         let fps = 0;
 
-        // Interactive collapse controller function
-        function toggleCollapse(headerElement) {
-            const panel = headerElement.parentElement;
-            panel.classList.toggle('expanded');
+        // UI Panel Visibility Controls
+        function hidePanel() { controlPanel.style.display = 'none'; }
+        function showPanel() { controlPanel.style.display = 'flex'; }
+
+        // Draggable window mechanism logic
+        dragElement(controlPanel);
+
+        function dragElement(elmnt) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            const header = document.getElementById(elmnt.id + "-header");
+            if (header) {
+                header.onmousedown = dragMouseDown;
+            } else {
+                elmnt.onmousedown = dragMouseDown;
+            }
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
         }
 
         function updateFPS() {
@@ -509,11 +575,11 @@
                 faceHTML += generateFaceHTML(results.faceLandmarks, lipsLayout, "Lips", "Face-Lips", checkboxes.lips.checked);
                 
                 if(!checkboxes.leftEye.checked && !checkboxes.rightEye.checked && !checkboxes.lips.checked) {
-                     faceHTML = `<div class="status-msg" style="grid-column: span 3;">ALL FACIAL MODULES MUTED</div>`;
+                     faceHTML = `<div class="status-msg">ALL FACIAL MODULES MUTED</div>`;
                 }
                 faceData.innerHTML = faceHTML;
             } else {
-                faceData.innerHTML = `<div class="status-msg" style="grid-column: span 3;">NO FACE DETECTED</div>`;
+                faceData.innerHTML = `<div class="status-msg">NO FACE DETECTED</div>`;
             }
 
             let currentFrameHands = [];
@@ -579,7 +645,7 @@
 
             if (assignedPanelB) {
                 drawCustomConnections(canvasCtx, assignedPanelB, [[0, 1], [1, 2], [2, 3], [3, 4]], '#f97316', 'thumb', 'panelB');
-                drawCustomConnections(canvasCtx, assignedPanelB, [[0, 5], [5, 6], [6, 7], [7, 8]], '#eab308', 'index', 'panelB');
+                drawCustomConnections(canvasCtx, assignedPanelB, [[0, 5], [5, 6], [6, 7], [7, 8]], '#eab308', 'index', 'pb', 'panelB');
                 drawCustomConnections(canvasCtx, assignedPanelB, [[9, 10], [10, 11], [11, 12], [0, 9]], '#22c55e', 'middle', 'panelB');
                 drawCustomConnections(canvasCtx, assignedPanelB, [[13, 14], [14, 15], [15, 16], [0, 13]], '#3b82f6', 'ring', 'panelB');
                 drawCustomConnections(canvasCtx, assignedPanelB, [[17, 18], [18, 19], [19, 20], [0, 17]], '#a855f7', 'pinky', 'panelB');
