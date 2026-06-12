@@ -132,7 +132,6 @@
             background: #1c1c1f;
         }
 
-        /* Grid Structure Layout pushed up below video */
         #app-layout {
             display: flex;
             flex-direction: column;
@@ -175,7 +174,6 @@
             pointer-events: none;
         }
 
-        /* Original structural graphics layout wrapper */
         .original-data-grid-layout {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -214,7 +212,6 @@
             text-align: center;
         }
 
-        /* Interior block styling */
         .finger-vertical-stack {
             display: flex;
             flex-direction: column;
@@ -323,7 +320,6 @@
         </div>
 
         <div class="original-data-grid-layout">
-            
             <div class="data-panel-block">
                 <div class="hand-header">Stream Panel A</div>
                 <div id="left-data" class="finger-vertical-stack">
@@ -344,7 +340,6 @@
                     <div class="status-msg">NO FACE DETECTED</div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -412,11 +407,9 @@
         let frameCount = 0;
         let fps = 0;
 
-        // UI Panel Visibility Controls
         function hidePanel() { controlPanel.style.display = 'none'; }
         function showPanel() { controlPanel.style.display = 'flex'; }
 
-        // Draggable window mechanism logic
         dragElement(controlPanel);
 
         function dragElement(elmnt) {
@@ -645,7 +638,8 @@
 
             if (assignedPanelB) {
                 drawCustomConnections(canvasCtx, assignedPanelB, [[0, 1], [1, 2], [2, 3], [3, 4]], '#f97316', 'thumb', 'panelB');
-                drawCustomConnections(canvasCtx, assignedPanelB, [[0, 5], [5, 6], [6, 7], [7, 8]], '#eab308', 'index', 'pb', 'panelB');
+                // FIXED: corrected third-party variable mismatch syntax error 'pb' -> 'panelB'
+                drawCustomConnections(canvasCtx, assignedPanelB, [[0, 5], [5, 6], [6, 7], [7, 8]], '#eab308', 'index', 'panelB');
                 drawCustomConnections(canvasCtx, assignedPanelB, [[9, 10], [10, 11], [11, 12], [0, 9]], '#22c55e', 'middle', 'panelB');
                 drawCustomConnections(canvasCtx, assignedPanelB, [[13, 14], [14, 15], [15, 16], [0, 13]], '#3b82f6', 'ring', 'panelB');
                 drawCustomConnections(canvasCtx, assignedPanelB, [[17, 18], [18, 19], [19, 20], [0, 17]], '#a855f7', 'pinky', 'panelB');
@@ -662,8 +656,9 @@
             locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`
         });
 
+        // FIXED: Dropped complexity down to 0 to trigger the high-performance engine variant
         holistic.setOptions({
-            modelComplexity: 1,
+            modelComplexity: 0,
             smoothLandmarks: true,
             minDetectionConfidence: 0.5,
             minTrackingConfidence: 0.5
@@ -671,12 +666,13 @@
 
         holistic.onResults(onResults);
 
+        // FIXED: Camera stream feeds lightweight tracking pixels down to machine-learning model
         const camera = new Camera(videoElement, {
             onFrame: async () => {
                 await holistic.send({ image: videoElement });
             },
-            width: 1280,
-            height: 720
+            width: 640,
+            height: 480
         });
         camera.start();
     </script>
