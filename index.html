@@ -256,19 +256,18 @@
             updateFPS();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
-            // Mirror video tracking output
             canvasCtx.save();
             canvasCtx.translate(canvasElement.width, 0);
             canvasCtx.scale(-1, 1);
             canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
-            // --- 1. FACE MESH PROCESSING ---
+            // --- 1. MINIMIZED FACE OVERLAY ---
             if (results.faceLandmarks) {
-                // Draw a clean, subtle white facial mesh for hypomimia observation
-                drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_TESSELATION, {color: 'rgba(250, 250, 250, 0.15)', lineWidth: 1});
-                drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_RIGHT_EYE, {color: '#3b82f6', lineWidth: 1.5});
-                drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_LEFT_EYE, {color: '#3b82f6', lineWidth: 1.5});
-                drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_LIPS, {color: '#ef4444', lineWidth: 1.5});
+                // Removed the dense full-face TESSELATION network for maximum performance
+                // Keeps only the essential features relevant to expression assessment
+                drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_RIGHT_EYE, {color: 'rgba(59, 130, 246, 0.4)', lineWidth: 1.5});
+                drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_LEFT_EYE, {color: 'rgba(59, 130, 246, 0.4)', lineWidth: 1.5});
+                drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_LIPS, {color: 'rgba(239, 68, 68, 0.4)', lineWidth: 1.5});
             }
 
             // --- 2. HANDS DATA ARCHITECTURE ---
@@ -328,7 +327,6 @@
                 }
             }
 
-            // Render Hand Panel A Telemetry
             if (assignedPanelA) {
                 drawCustomConnections(canvasCtx, assignedPanelA, [[0, 1], [1, 2], [2, 3], [3, 4]], '#f97316');
                 drawCustomConnections(canvasCtx, assignedPanelA, [[0, 5], [5, 6], [6, 7], [7, 8]], '#eab308');
@@ -343,7 +341,6 @@
                 leftData.innerHTML = "NO DATA DETECTED";
             }
 
-            // Render Hand Panel B Telemetry
             if (assignedPanelB) {
                 drawCustomConnections(canvasCtx, assignedPanelB, [[0, 1], [1, 2], [2, 3], [3, 4]], '#f97316');
                 drawCustomConnections(canvasCtx, assignedPanelB, [[0, 5], [5, 6], [7, 8]], '#eab308');
@@ -361,7 +358,6 @@
             canvasCtx.restore();
         }
 
-        // Initialize unified Holistic pipeline instead of lone Hand module
         const holistic = new Holistic({
             locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`
         });
