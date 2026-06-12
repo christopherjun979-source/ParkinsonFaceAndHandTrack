@@ -36,27 +36,28 @@
             color: #a1a1aa;
         }
 
-        /* Minimalist Gray Gear Configuration Button */
+        /* Scaled Up Gear Configuration Button */
         #open-panel-btn {
             background: transparent;
             border: none;
             color: #71717a;
-            font-size: 20px;
+            font-size: 28px; /* Made bigger for easier access */
             cursor: pointer;
             padding: 4px;
             line-height: 1;
-            transition: color 0.2s ease;
+            transition: color 0.2s ease, transform 0.2s ease;
         }
 
         #open-panel-btn:hover {
-            color: #a1a1aa;
+            color: #fafafa;
+            transform: rotate(30deg);
         }
 
         /* Floating, Draggable Control Panel Window */
         #control-panel {
             position: absolute;
             z-index: 999;
-            top: 45px;
+            top: 50px;
             right: 0;
             background: #121214;
             border: 1px solid #27272a;
@@ -142,11 +143,12 @@
             margin: 0 auto;
         }
 
-        /* Smaller Video Container Size to fit screen space completely */
+        /* Fixed aspect ratio styling container prevents horizontal stretching */
         #container {
             position: relative;
             width: 960px;
-            height: 540px;
+            max-width: 100%;
+            aspect-ratio: 16 / 9; 
             background: #000;
             overflow: hidden;
         }
@@ -156,8 +158,9 @@
             position: absolute;
             left: 0;
             top: 0;
-            width: 960px;
-            height: 540px;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Keeps internal camera pixels perfectly proportioned */
             transform: scaleX(-1);
         }
 
@@ -176,7 +179,7 @@
             pointer-events: none;
         }
 
-        /* Compact Grid columns layout wrapper to view all data at once */
+        /* Compact layout tracking blocks wrapper */
         .original-data-grid-layout {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -318,8 +321,8 @@
     <div id="app-layout">
         <div id="container">
             <div id="fps-counter">FPS: --</div>
-            <video id="webcam" width="960" height="540" autoplay playsinline></video>
-            <canvas id="output_canvas" width="960" height="540"></canvas>
+            <video id="webcam" autoplay playsinline></video>
+            <canvas id="output_canvas"></canvas>
         </div>
 
         <div class="original-data-grid-layout">
@@ -466,6 +469,13 @@
                 lastFrameTime = now;
             }
         }
+
+        // Keep internal logic canvas sync parameters dynamic to aspect ratio matches
+        function adjustCanvasSize() {
+            canvasElement.width = container.clientWidth;
+            canvasElement.height = container.clientHeight;
+        }
+        window.addEventListener('resize', adjustCanvasSize);
 
         function drawCustomConnections(ctx, landmarks, connections, color, trackingKey, panelKey) {
             if (!landmarks || !checkboxes[panelKey][trackingKey].checked) return;
@@ -673,7 +683,6 @@
 
         holistic.onResults(onResults);
 
-        // Optimized video feed size processing for seamless dual hand operations
         const camera = new Camera(videoElement, {
             onFrame: async () => {
                 await holistic.send({ image: videoElement });
@@ -681,6 +690,9 @@
             width: 640,
             height: 480
         });
+        
+        // Initialize layout size syncing options
+        adjustCanvasSize();
         camera.start();
     </script>
 </body>
